@@ -9,14 +9,14 @@ namespace ConsoleApp60
         static void Main(string[] args)
         {
             string text = Console.ReadLine();
-            Stack<int> notRev = new Stack<int>();
+            Stack<char> notRev = new Stack<char>();
             for (int i = 0; i < text.Length; i++)
             {
                 notRev.Push(text[i]);
             }
             while(notRev.Count>0)
             {
-                Console.WriteLine(notRev.Pop());
+                Console.Write(notRev.Pop());
             }
             
            
