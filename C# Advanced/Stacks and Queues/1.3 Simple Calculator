@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp60
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            string[] text = Console.ReadLine().Split().ToArray();
+            var text2 = text.Reverse().ToArray();
+            Stack<string> stack = new Stack<string>(text2);
+
+            int result = 0;
+            int num1 = int.Parse(stack.Pop());
+            result += num1;
+            while(stack.Count>0)
+            {
+                string symbol = stack.Pop();
+                if(symbol=="+")
+                {
+                    result += int.Parse(stack.Pop());
+                }
+                else if (symbol == "-")
+                {
+                    result -= int.Parse(stack.Pop());
+                }
+            }
+            Console.WriteLine(result);
+        }
+    }
+}
