@@ -1,0 +1,26 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp61
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] nums = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            Queue<int> numsIn = new Queue<int>(nums);
+            List<int> evenNums = new List<int>();
+            while(numsIn.Count>0)
+            {
+                int numToCheck = numsIn.Dequeue();
+                if(numToCheck%2==0)
+                {
+                    evenNums.Add(numToCheck);
+                }
+            }
+            Console.WriteLine(String.Join(", ", evenNums));
+        }
+    }
+}
