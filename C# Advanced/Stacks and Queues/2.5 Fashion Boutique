@@ -1,0 +1,38 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp61
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> clothes = Console.ReadLine().Split().Select(int.Parse).ToList();
+            int capacity = int.Parse(Console.ReadLine());
+            int stackCount = 0;
+            int count = clothes.Count;
+            bool isItDone = false;
+            while(clothes.Count>0)
+            {
+                Stack<int> stack = new Stack<int>();
+                while (clothes.Count>0)
+                {
+                    if((stack.Sum() + clothes[0]) <= capacity)
+                    {
+                        stack.Push(clothes[0]);
+                        clothes.RemoveAt(0);
+                    }
+                    else
+                    {
+                        stackCount++;
+                        break;
+                    }
+                }
+            }
+            Console.WriteLine(stackCount+1);
+
+        }
+    }
+}
