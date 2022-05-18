@@ -1,0 +1,48 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp61
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<string> listOfSongs = Console.ReadLine().Split(", ").ToList();
+            Queue<string> songs = new Queue<string>(listOfSongs);
+            
+            while(songs.Count>0)
+            {
+                string[] command = Console.ReadLine().Split().ToArray();
+                if(command[0]=="Play")
+                {
+                    songs.Dequeue();
+                }
+                else if(command[0]=="Add")
+                {
+
+                    string songToAdd = "";
+                    for (int i = 1; i < command.Length-1; i++)
+                    {
+                        songToAdd += command[i] + " ";
+                    }
+                    songToAdd += command[command.Length - 1];
+                    if(songs.Contains(songToAdd))
+                    {
+                        Console.WriteLine(songToAdd+" is already contained!");
+                    }
+                    else
+                    {
+                        songs.Enqueue(songToAdd);
+                    }
+                }
+                else if(command[0]=="Show")
+                {
+                    Console.WriteLine(string.Join(", ",songs));
+                }
+            }
+            Console.WriteLine("No more songs!");
+        }
+    }
+}
