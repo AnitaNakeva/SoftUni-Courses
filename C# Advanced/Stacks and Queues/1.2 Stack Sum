@@ -33,6 +33,7 @@ namespace ConsoleApp60
                         }
                     }
                 }
+                
 
                 command = Console.ReadLine().ToLower();
             }
