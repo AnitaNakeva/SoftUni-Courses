@@ -1,0 +1,64 @@
+using System;
+using System.Linq;
+
+namespace ConsoleApp66
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int[] sizes = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            int n = sizes[0];
+            int m = sizes[1];
+            string[,] matrix = new string[n,m];
+
+            for (int row = 0; row < n; row++)
+            {
+                string[] symbols = Console.ReadLine().Split().ToArray();
+                for (int col = 0; col < m; col++)
+                {
+                    matrix[row, col] = symbols[col];
+                }
+            }
+
+            string command = Console.ReadLine();
+            while(command != "END")
+            {
+                string[] commands = command.Split().ToArray();
+                if (commands[0] == "swap" && commands.Length==5)
+                {
+                    int r1 = int.Parse(commands[1]);
+                    int c1 = int.Parse(commands[2]);
+                    int r2 = int.Parse(commands[3]);
+                    int c2 = int.Parse(commands[4]);
+                    if (r1 < n && r1 >= 0 && r2 < n && r2 >= 0 && c1 >= 0 && c1 < m && c2 >= 0 && c2 < m)
+                    {
+                        string sym1 = matrix[r1, c1];
+                        string sym2 = matrix[r2, c2];
+                        matrix[r2, c2] = sym1;
+                        matrix[r1, c1] = sym2;
+                        for (int i = 0; i < n; i++)
+                        {
+                            for (int j = 0; j < m; j++)
+                            {
+                                Console.Write(matrix[i, j] + " ");
+                            }
+                            Console.WriteLine();
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input!");
+                    }
+
+                }
+                else
+                    {
+                        Console.WriteLine("Invalid input!");
+                    }
+                    command = Console.ReadLine();
+
+            }
+        }
+    }
+}
