@@ -1,0 +1,78 @@
+using System;
+using System.Linq;
+
+namespace ConsoleApp67
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            int[,] matrix = new int[n,n];
+            for (int i = 0; i < n; i++)
+            {
+                int[] info = Console.ReadLine().Split().Select(int.Parse).ToArray();
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        matrix[i, j] = info[j];
+                    }
+                }
+            }
+
+            string[] coordinates = Console.ReadLine().Split().ToArray();
+            foreach(var coordinate in coordinates)
+            {
+                string[] coord = coordinate.Split(",").ToArray();
+                int rowC = int.Parse(coord[0]);
+                int colC = int.Parse(coord[1]);
+                int currentBomb = matrix[rowC, colC];
+                for (int row = rowC - 1; row <= rowC + 1; row++)
+                {
+                    for (int col = colC - 1; col <= colC + 1; col++)
+                    {
+                        if (row >= 0 && row < matrix.GetLength(0) && col >= 0 && col < matrix.GetLength(1))
+                        {
+                            if (matrix[row, col] <= 0 || currentBomb < 0)
+                            {
+                                continue;
+                            }
+                            if(row == rowC && col == colC)
+                            {
+                                continue;
+                            }
+                            matrix[row, col] -= currentBomb;
+                        }
+
+                    }
+
+                }
+                matrix[rowC, colC] = 0;
+            }
+
+            int count = 0;
+            int sum = 0;
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if(matrix[i, j]>0)
+                    {
+                        count++;
+                        sum += matrix[i, j];
+                    }
+                }
+            }
+            Console.WriteLine("Alive cells: "+count);
+            Console.WriteLine("Sum: "+sum);
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write(matrix[i,j]+" ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
