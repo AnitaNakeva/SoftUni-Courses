@@ -1,0 +1,93 @@
+using System;
+using System.Linq;
+
+namespace ConsoleApp67
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            int[,] matrix = new int[n,n];
+            for (int i = 0; i < n; i++)
+            {
+                int[] info = Console.ReadLine().Split().Select(int.Parse).ToArray();
+                {
+                    for (int j = 0; j < n; j++)
+                    {
+                        matrix[i, j] = info[j];
+                    }
+                }
+            }
+
+            string[] coordinates = Console.ReadLine().Split().ToArray();
+            foreach(var coordinate in coordinates)
+            {
+                string[] coord = coordinate.Split(",").ToArray();
+                int rowC = int.Parse(coord[0]);
+                int colC = int.Parse(coord[1]);
+                if (matrix[rowC, colC] > 0)
+                {
+                    if (colC - 1 >= 0 && matrix[rowC, colC - 1]>0)
+                    {
+                        matrix[rowC, colC - 1] -= matrix[rowC, colC];
+                    }
+                    if (rowC - 1 >= 0 && colC - 1 >= 0 && matrix[rowC - 1, colC - 1] > 0)
+                    {
+                        matrix[rowC - 1, colC - 1] -= matrix[rowC, colC];
+                    }
+                    if (rowC - 1 >= 0 && matrix[rowC - 1, colC] > 0)
+                    {
+                        matrix[rowC - 1, colC] -= matrix[rowC, colC];
+                    }
+                    if (rowC - 1 >= 0 && colC + 1 < n && matrix[rowC - 1, colC + 1] > 0)
+                    {
+                        matrix[rowC - 1, colC + 1] -= matrix[rowC, colC];
+                    }
+                    if (colC + 1 < n && matrix[rowC, colC + 1] > 0)
+                    {
+                        matrix[rowC, colC + 1] -= matrix[rowC, colC];
+                    }
+                    if (rowC + 1 < n && colC + 1 < n && matrix[rowC + 1, colC + 1] > 0)
+                    {
+                        matrix[rowC + 1, colC + 1] -= matrix[rowC, colC];
+                    }
+                    if (rowC + 1 < n && matrix[rowC + 1, colC] > 0)
+                    {
+                        matrix[rowC + 1, colC] -= matrix[rowC, colC];
+                    }
+                    if (rowC + 1 < n && colC - 1 >= 0 && matrix[rowC + 1, colC - 1] > 0)
+                    {
+                        matrix[rowC + 1, colC - 1] -= matrix[rowC, colC];
+                    }
+
+                    matrix[rowC, colC] = 0;
+                }
+            }
+
+            int count = 0;
+            int sum = 0;
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if(matrix[i, j]>0)
+                    {
+                        count++;
+                        sum += matrix[i, j];
+                    }
+                }
+            }
+            Console.WriteLine("Alive cells: "+count);
+            Console.WriteLine("Sum: "+sum);
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write(matrix[i,j]+" ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
