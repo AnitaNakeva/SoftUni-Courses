@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp68
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            double[] array = Console.ReadLine().Split().Select(double.Parse).ToArray();
+            Dictionary<double, int> dictionary = new Dictionary<double, int>();
+            foreach(double num in array)
+            {
+                if(dictionary.ContainsKey(num))
+                {
+                    dictionary[num]++;
+                }
+                else
+                {
+                    dictionary[num] = 1;
+                }
+            }
+
+            foreach(var n in dictionary)
+            {
+                Console.WriteLine(n.Key+" - "+n.Value+" times");
+            }
+        }
+    }
