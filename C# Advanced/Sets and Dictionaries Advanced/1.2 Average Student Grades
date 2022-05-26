@@ -1,0 +1,42 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp68
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            Dictionary<string, List<decimal>> gradebook = new Dictionary<string, List<decimal>>();
+
+            for (int i = 0; i < n; i++)
+            {
+                string[] info = Console.ReadLine().Split().ToArray();
+                if(gradebook.ContainsKey(info[0]))
+                {
+                    double grade = (double)decimal.Parse(info[1]);
+                    gradebook[info[0]].Add((decimal)grade);
+                }
+                else
+                {
+                    gradebook.Add(info[0], new List<decimal>());
+                    double grade = (double)decimal.Parse(info[1]);
+                    gradebook[info[0]].Add((decimal)grade);
+                }
+            }
+
+            foreach(var st in gradebook)
+            {
+                decimal average = st.Value.Average();
+                Console.Write(st.Key + " -> ");
+                foreach(var grade in st.Value)
+                {
+                    Console.Write($"{grade:f2}"+" ");
+                }
+                Console.WriteLine("(avg: " + $"{average:f2}" + ")");
+            }
+        }
+    }
+}
