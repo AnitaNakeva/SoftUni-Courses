@@ -1,0 +1,75 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp70
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, Dictionary<string, int>> wardrobe = new Dictionary<string, Dictionary<string, int>>();
+            //string[] separators = new string[] { " -> ","," };
+            int n = int.Parse(Console.ReadLine());
+            for (int i = 0; i < n; i++)
+            {
+                
+                string[] info = Console.ReadLine().Split(" -> ").ToArray();
+                string color = info[0];
+                if(!wardrobe.ContainsKey(color))
+                {
+                    wardrobe.Add(color, new Dictionary<string, int>());
+                    string[] clothing = info[1].Split(",").ToArray();
+                    foreach(var cl in clothing)
+                    {
+                        if (!wardrobe[color].ContainsKey(cl))
+                        {
+                            wardrobe[color].Add(cl, 1);
+                        }
+                        else
+                        {
+                            wardrobe[color][cl]++;
+                        }
+                    }
+                }
+                else
+                {
+                    string[] clothing = info[1].Split(",").ToArray();
+                    foreach (var cl in clothing)
+                    {
+                        if (!wardrobe[color].ContainsKey(cl))
+                        {
+                            wardrobe[color].Add(cl, 1);
+                        }
+                        else
+                        {
+                            wardrobe[color][cl]++;
+                        }
+                    }
+                }
+            }
+
+            string[] order = Console.ReadLine().Split().ToArray();
+            string colorToFind = order[0];
+            string clothingToFind = order[1];
+            foreach (var color in wardrobe)
+                    {
+                        Console.WriteLine(color.Key+" clothes:");
+
+                        foreach (var clothing in color.Value)
+                        {
+                            if (color.Key == colorToFind && clothing.Key == clothingToFind)
+                            {
+                                Console.WriteLine("* " + clothing.Key + " - " + clothing.Value + " (found!)");
+                            }
+                            else
+                            {
+                                Console.WriteLine("* " + clothing.Key + " - " + clothing.Value);
+                            }
+                        }
+                    }
+
+            
+        }
+    }
+}
