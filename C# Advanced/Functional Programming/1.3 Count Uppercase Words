@@ -1,0 +1,17 @@
+using System;
+using System.Linq;
+
+namespace ConsoleApp74
+{
+    internal class Program
+    {
+        
+        static void Main(string[] args)
+        {
+             Predicate<string> capital = (word) => word.Length>0 &&
+             Char.IsUpper(word[0]);
+            Console.WriteLine(string.Join("\r\n", Console.ReadLine().
+                Split(" ").Where(x => capital(x)).ToArray()));
+        }
+    }
+}
