@@ -1,0 +1,21 @@
+using System;
+using System.Linq;
+
+namespace ConsoleApp74
+{
+    internal class Program
+    {
+        
+        static void Main(string[] args)
+        {
+            Func<double, double> vat = (word) => word * 1.2;
+            double[] nums = Console.ReadLine().
+                Split(", ").Select(double.Parse).Select(x => vat(x)).ToArray();
+
+            foreach(double num in nums)
+            {
+                Console.WriteLine($"{num:F2}");
+            }
+        }
+    }
+}
