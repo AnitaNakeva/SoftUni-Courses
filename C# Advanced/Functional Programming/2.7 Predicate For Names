@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp76
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            List<string> names = Console.ReadLine().Split().ToList();
+            List<string> newNames = new List<string>();
+
+            Func<string, int, List<string>, List<string>> filterNames = (name, n, newNames) =>
+            {
+                if (name.Length <= n)
+                {
+                    newNames.Add(name);
+                }
+                return newNames;
+            };
+
+            foreach(string name in names)
+            {
+                newNames = filterNames(name, n, newNames);
+            }
+
+            foreach(string name in newNames)
+            {
+                Console.WriteLine(name);
+            }
+        }
+    }
+}
