@@ -1,0 +1,34 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp76
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> numbers = Console.ReadLine().Split().Select(int.Parse).ToList();
+            int n = int.Parse(Console.ReadLine());
+            List<int> list2 = new List<int>();
+            Predicate<int> isItDivisible = a => a % n == 0;
+            Func<List<int>, int, List<int>> result = (list, a) =>
+            {
+                list.Add(a);
+                return list;
+            };
+                
+            
+
+            foreach(int a in numbers)
+            {
+                if(!isItDivisible(a))
+                {
+                    list2 = result(list2, a);
+                }
+            }
+            list2.Reverse();
+            Console.WriteLine(String.Join(" ", list2));
+        }
+    }
+}
