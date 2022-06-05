@@ -1,0 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp76
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> borders = Console.ReadLine().Split().Select(int.Parse).ToList();
+            List<int> numbers = new List<int>();
+            for (int i = borders[0]; i <= borders[1]; i++)
+            {
+                numbers.Add(i);
+            }
+            Predicate<int> predicate = null;
+            string command = Console.ReadLine();
+
+            if(command=="even")
+            {
+                predicate = x => x % 2 == 0;
+            }
+            else
+            {
+                predicate = x => x % 2 != 0;
+            }
+
+            Console.WriteLine(string.Join(" ", numbers.FindAll(predicate)));
+        }
+    }
+}
