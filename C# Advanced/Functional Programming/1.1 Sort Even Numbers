@@ -11,9 +11,12 @@ namespace ConsoleApp74
                Select(x => int.Parse(x)).Where(x => x % 2 == 0).
                OrderBy(x => x).ToArray();
 
-            Console.WriteLine(String.Join(", ", nums));
+           
+ Console.WriteLine(String.Join(", ", nums));
         }
     }
-    
+
+
+
 }
 
