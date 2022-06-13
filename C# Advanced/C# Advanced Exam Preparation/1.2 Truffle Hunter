@@ -1,0 +1,169 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp84
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            string[,] matrix = new string[n, n];
+
+            for (int i = 0; i < n; i++)
+            {
+                string[] data = Console.ReadLine().Split().ToArray();
+                for (int j = 0; j < n; j++)
+                {
+                    matrix[i, j] = data[j];
+                }
+            }
+
+            string command = Console.ReadLine();
+            int countB = 0;
+            int countS = 0;
+            int countW = 0;
+            int countBoar = 0;
+
+            while(command!="Stop the hunt")
+            {
+                string[] commands = command.Split().ToArray();
+                if(commands[0]=="Collect")
+                {
+
+                    int row = int.Parse(commands[1]);
+                    int col = int.Parse(commands[2]);
+
+                    if (row >= 0 && row < n && col >= 0 && row < n)
+                    {
+                        if (matrix[row, col] == "B")
+                        {
+                            countB++;
+                            matrix[row, col] = "-";
+                        }
+                        else if (matrix[row, col] == "S")
+                        {
+                            countS++;
+                            matrix[row, col] = "-";
+                        }
+                        else if (matrix[row, col] == "W")
+                        {
+                            countW++;
+                            matrix[row, col] = "-";
+                        }
+                    }
+                }
+
+                else if(commands[0]=="Wild_Boar")
+                {
+                    int row = int.Parse(commands[1]);
+                    int col = int.Parse(commands[2]);
+                    string direction = commands[3];
+                    string startCell = matrix[row, col];
+                    //if(startCell!="-")
+                    {
+                        if (direction == "right")
+                        {
+                            for (int i = col; i < n ; i += 2)
+                            {
+                                if (matrix[row, i] == "B")
+                                {
+                                    countBoar++;
+                                    matrix[row, i] = "-";
+                                }
+                                if (matrix[row, i] == "S")
+                                {
+                                    countBoar++;
+                                    matrix[row, i] = "-";
+                                }
+                                if (matrix[row, i] == "W")
+                                {
+                                    countBoar++;
+                                    matrix[row, i] = "-";
+                                }
+                            }
+                        }
+                        else if(direction=="left")
+                        {
+                            for (int i = col; i >= 0 ; i -= 2)
+                            {
+                                if (matrix[row, i] == "B")
+                                {
+                                    countBoar++;
+                                    matrix[row, i] = "-";
+                                }
+                                if (matrix[row, i] == "S")
+                                {
+                                    countBoar++;
+                                    matrix[row, i] = "-";
+                                }
+                                if (matrix[row, i] == "W")
+                                {
+                                    countBoar++;
+                                    matrix[row, i] = "-";
+                                }
+                            }
+                        }
+                        else if (direction == "up")
+                        {
+                            for (int i = row; i >= 0; i -= 2)
+                            {
+                                if (matrix[i, col] == "B")
+                                {
+                                    countBoar++;
+                                    matrix[i, col] = "-";
+                                }
+                                if (matrix[i, col] == "S")
+                                {
+                                    countBoar++;
+                                    matrix[i, col] = "-";
+                                }
+                                if (matrix[i, col] == "W")
+                                {
+                                    countBoar++;
+                                    matrix[i, col] = "-";
+                                }
+                            }
+                        }
+                        else if (direction == "down")
+                        {
+                            for (int i = row; i < n; i += 2)
+                            {
+                                if (matrix[i, col] == "B")
+                                {
+                                    countBoar++;
+                                    matrix[i, col] = "-";
+                                }
+                                if (matrix[i, col] == "S")
+                                {
+                                    countBoar++;
+                                    matrix[i, col] = "-";
+                                }
+                                if (matrix[i, col] == "W")
+                                {
+                                    countBoar++;
+                                    matrix[i, col] = "-";
+                                }
+                            }
+                        }
+                    }
+                }
+
+                command = Console.ReadLine();
+            }
+
+            Console.WriteLine($"Peter manages to harvest {countB} black, {countS} summer, and {countW} white truffles.");
+            Console.WriteLine($"The wild boar has eaten {countBoar} truffles.");
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write(matrix[i, j]+" ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
