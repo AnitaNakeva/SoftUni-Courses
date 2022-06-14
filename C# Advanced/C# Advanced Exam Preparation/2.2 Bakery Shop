@@ -1,0 +1,99 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp86
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            var waterInfo = Console.ReadLine().Split().Select(double.Parse).ToArray();
+            var flourInfo = Console.ReadLine().Split().Select(double.Parse).ToArray();
+            Queue<double> water = new Queue<double>(waterInfo);
+            Stack<double> flour = new Stack<double>(flourInfo);
+           // List<double> endFlour = new List<double>();
+            //List<double> endWater = new List<double>();
+            Dictionary<string, int> count = new Dictionary<string, int>
+            {
+                { "Croissant", 0 },
+                { "Muffin", 0 },
+                { "Baguette", 0},
+                { "Bagel", 0 }
+            };
+            while(water.Count>0&&flour.Count>0)
+            {
+                double currentWater = (double)water.Peek();
+                double currentFlour = (double)flour.Peek();
+                double sum = currentFlour + currentWater;
+                if((currentFlour / sum) * 100 == 60 && (currentWater / sum) * 100 == 40)
+                {
+                    count["Muffin"]++;
+                    water.Dequeue();
+                    flour.Pop();
+                }
+                else if ((currentFlour / sum) * 100 == 50 && (currentWater / sum) * 100 == 50)
+                {
+                    count["Croissant"]++;
+                    water.Dequeue();
+                    flour.Pop();
+                }
+                else if ((currentFlour / sum) * 100 == 70 && (currentWater / sum) * 100 == 30)
+                {
+                    count["Baguette"]++;
+                    water.Dequeue();
+                    flour.Pop();
+                }
+                else if ((currentFlour / sum) * 100 == 80 && (currentWater / sum) * 100 == 20)
+                {
+                    count["Bagel"]++;
+                    water.Dequeue();
+                    flour.Pop();
+                }
+                else
+                {
+                    double lastFlour = (double)flour.Pop();
+                    double flourToAdd = lastFlour-(double)water.Peek();
+                    flour.Push(flourToAdd);
+                    water.Dequeue();
+                    count["Croissant"]++;
+                }
+            }
+
+            var orderedCount = count.OrderByDescending(x => x.Value).ThenBy(x => x.Key);
+            foreach(var el in orderedCount)
+            {
+                if (el.Value != 0)
+                {
+                    Console.WriteLine($"{el.Key}: {el.Value}");
+                }
+            }
+            string waterLeft = "";
+            if (water.Count > 0)
+            {
+                waterLeft = $"{string.Join(", ", water)}";
+            }
+            else
+            {
+                waterLeft = "None";
+            }
+            string flourLeft = "";
+            if (flour.Count > 0)
+            {
+                flourLeft = $"{string.Join(", ", flour)}";
+            }
+            else
+            {
+                flourLeft = "None";
+            }
+
+
+            Console.WriteLine($"Water left: {waterLeft}");
+            Console.WriteLine($"Flour left: {flourLeft}");
+            
+
+
+        }
+    }
+}
