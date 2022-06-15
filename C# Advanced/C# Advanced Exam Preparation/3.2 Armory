@@ -1,0 +1,136 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp87
+{
+    internal class Program
+    {
+        private static int kingRow;
+        private static int kingCol;
+        private static string[,] matrix;
+        private static string lastDirection;
+        private static int allCoins;
+        private static bool isOutside = false;
+
+        static void GoDirection(int a, int b)
+        {
+            if(IsInside(kingRow+a,kingCol+b))
+            {
+                matrix[kingRow, kingCol] = "-";
+                kingRow = kingRow + a;
+                kingCol = kingCol + b;
+                int coins;
+                if (int.TryParse(matrix[kingRow, kingCol], out coins))
+                {
+                    allCoins += coins;
+                    matrix[kingRow, kingCol] = "A";
+                }
+                else if(matrix[kingRow, kingCol]=="-")
+                {
+                    matrix[kingRow, kingCol] = "A";
+                }
+                else
+                {
+                    for (int i = 0; i < matrix.GetLength(0); i++)
+                    {
+                        for (int j = 0; j < matrix.GetLength(1); j++)
+                        {
+                            if(matrix[i,j]=="M")
+                            {
+                                if(kingRow != i || kingCol != j)
+                                {
+                                    matrix[kingRow, kingCol] = "-";
+                                    kingRow = i;
+                                    kingCol = j;
+                                    matrix[kingRow, kingCol] = "A";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                matrix[kingRow, kingCol] = "-";
+                isOutside = true;
+            }
+        }
+
+        private static bool IsInside(int row, int col)
+        {
+            return row < matrix.GetLength(0) && row >= 0 && col < matrix.GetLength(1) && col >= 0;
+        }
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+
+            matrix = new string[n, n];
+            for (int i = 0; i < n; i++)
+            {
+                string data = Console.ReadLine();
+                for (int j = 0; j < n; j++)
+                {
+                    matrix[i, j] = data[j].ToString();
+                    if(matrix[i,j]=="A")
+                    {
+                        kingCol = j;
+                        kingRow = i;
+                    }
+                }
+            }
+            while(true)
+            {
+                if(allCoins>=65)
+                {
+                   // matrix[kingRow, kingCol] = "-";
+                    break;
+                }
+                if(isOutside)
+                {
+                    break;
+                }
+                string direction = Console.ReadLine();
+                if(direction=="up")
+                {
+                    GoDirection(-1, 0);
+                }
+                else if (direction == "down")
+                {
+                    GoDirection(1, 0);
+                }
+                else if (direction == "right")
+                {
+                    GoDirection(0, 1);
+                }
+                else if (direction == "left")
+                {
+                    GoDirection(0, -1);
+                }
+
+            }
+
+            if(isOutside)
+            {
+                Console.WriteLine("I do not need more swords!");
+            }
+            else
+            {
+                Console.WriteLine("Very nice swords, I will come back for more!");
+            }
+
+            Console.WriteLine($"The king paid {allCoins} gold coins.");
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write(matrix[i,j]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+    }
+}
