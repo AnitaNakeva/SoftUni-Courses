@@ -1,0 +1,186 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp92
+{
+    internal class Program
+    {
+        public static int bRow;
+        public static int bCol;
+        public static string[,] matrix;
+        public static List<string> collectedBranches = new List<string>();
+        public static int brunchesCount;
+        public static void MoveDirection(int a, int b)
+        {
+            if(isItIn(bRow+a, bCol+b))
+            {
+                matrix[bRow, bCol] = "-";
+                bRow += a;
+                bCol += b;
+                if(matrix[bRow,bCol]=="-")
+                {
+                    matrix[bRow, bCol] = "B";
+                }
+                else if(matrix[bRow,bCol]=="F")
+                {
+                    matrix[bRow, bCol] = "-";
+                    if (bRow == matrix.GetLength(0) - 1 && a!=0)
+                    {
+                        bRow = 0;
+                    }
+                    else if (bRow == 0&&a!=0)
+                    {
+                        bRow = matrix.GetLength(0) - 1;
+                    }
+                    else if (bCol == matrix.GetLength(1) - 1&& b!=0)
+                    {
+                        bCol = 0;
+                    }
+                    else if(bCol == 0&& b!=0)
+                    {
+                        bCol = matrix.GetLength(1) - 1;
+                    }
+                    else
+                    {
+                        if(a!=0)
+                        {
+                            if (a < 0)
+                            {
+                                bRow = 0;
+                            }
+                            else if (a > 0)
+                            {
+                                bRow = matrix.GetLength(0) - 1;
+                            }
+                        }
+                        else if(b!=0)
+                        {
+                            if(b<0)
+                            {
+                                bCol = 0;
+                            }
+                            else if(b>0)
+                            {
+                                bCol = matrix.GetLength(1) - 1;
+                            }
+                        }
+                    }
+                    if(matrix[bRow,bCol]!="-"&& matrix[bRow, bCol]!="F")
+                    {
+                        collectedBranches.Add(matrix[bRow, bCol]);
+                        matrix[bRow, bCol] = "B";
+                    }
+                    else
+                    {
+                        matrix[bRow, bCol] = "B";
+                    }
+                }
+                else
+                {
+                    collectedBranches.Add(matrix[bRow, bCol]);
+                    matrix[bRow, bCol] = "B";
+                }
+            }
+            else
+            {
+                brunchesCount--;
+                collectedBranches.RemoveAt(collectedBranches.Count - 1);
+            }
+        }
+        public static bool isItIn(int row, int col)
+        {
+            return row >= 0 && row < matrix.GetLength(0) && col >= 0 && col < matrix.GetLength(1);
+        }
+        static void Main(string[] args)
+        {
+            int n = int.Parse(Console.ReadLine());
+            matrix = new string[n, n];
+            for (int i = 0; i < n; i++)
+            {
+                string[] line = Console.ReadLine().Split().ToArray();
+                for (int j = 0; j < n; j++)
+                {
+                    matrix[i, j] = line[j];
+                    if(matrix[i,j]=="B")
+                    {
+                        bRow = i;
+                        bCol = j;
+                    }
+                }
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (matrix[i, j] != "-" && matrix[i, j] != "B" && matrix[i, j] != "F")
+                    {
+                        brunchesCount++;
+                    }
+                }
+            }
+
+            string command = Console.ReadLine();
+            while(command!="end")
+            {
+                if (command == "up")
+                {
+                    MoveDirection(-1, 0);
+                }
+                else if (command == "down")
+                {
+                    MoveDirection(1, 0);
+                }
+                else if (command == "right")
+                {
+                    MoveDirection(0, 1);
+                }
+                else if (command == "left")
+                {
+                    MoveDirection(0, -1);
+                }
+
+                if(brunchesCount==collectedBranches.Count)
+                {
+                    break;
+                }
+
+                command = Console.ReadLine();
+            }
+
+            int countLeft = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (matrix[i, j] != "-" && matrix[i, j] != "B" && matrix[i, j] != "F")
+                    {
+                        countLeft++;
+                    }
+
+                }
+            }
+
+            if(countLeft==0)
+            {
+                Console.WriteLine($"The Beaver successfully collect {collectedBranches.Count} wood branches: {string.Join(", ",collectedBranches)}.");
+            }
+            else
+            {
+                Console.WriteLine($"The Beaver failed to collect every wood branch. There are {countLeft} branches left.");
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write(matrix[i,j]+" ");
+                }
+                Console.WriteLine();
+            }
+
+        }
+    }
+}
