@@ -1,0 +1,127 @@
+using System;
+using System.Collections.Generic;
+
+namespace ConsoleApp93
+{
+    internal class Program
+    {
+        public static int wRow;
+        public static int wCol;
+        public static int bRow;
+        public static int bCol;
+        public static string[,] matrix;
+        public static bool end = false;
+        public static List<char> abc = new List<char>
+            {
+            'a','b','c','d','e','f','g','h'
+            };
+        public static void Moving(int row, int col, int a)
+        {
+            matrix[row, col] = "-";
+            row += a;
+            if (IsInside(row, col))
+            {
+                if (IsInside(row, col + a))
+                {
+                    if (matrix[row, col + a] != "-")
+                    {
+                        if (a == -1)
+                        {
+                            Console.WriteLine($"Game over! White capture on {abc[col + a]}{8 - row}.");
+                            end = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Game over! Black capture on {abc[col + a]}{8 - row}.");
+                            end = true;
+                        }
+                    }
+                }
+
+                if (IsInside(row, col - a))
+                {
+                    if (matrix[row, col - a] != "-")
+                    {
+
+                        if (a == 1)
+                        {
+                            Console.WriteLine($"Game over! Black capture on {abc[col - a]}{8 - row}.");
+                            end = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Game over! White capture on {abc[col - a]}{8 - row}.");
+                            end = true;
+                        }
+                    }
+                }
+                //if (matrix[row, col - a] == "-" && matrix[row, col + a] == "-")
+                if(end!=true)
+                {
+                    if (a == -1)
+                    {
+                        matrix[row, col] = "w";
+                        wRow = row;
+                        wCol = col;
+                    }
+                    else
+                    {
+                        matrix[row, col] = "b";
+                        bRow = row;
+                        bCol = col;
+                    }
+                }
+            }
+            else
+            {
+                if (a == -1)
+                {
+                    Console.WriteLine($"Game over! White pawn is promoted to a queen at {abc[col]}{9 - Math.Abs(row)}.");
+                    end = true;
+                }
+                else
+                {
+                    Console.WriteLine($"Game over! Black pawn is promoted to a queen at {abc[col]}{9 - Math.Abs(row)}.");
+                    end = true;
+                }
+            }
+        }
+
+        public static bool IsInside(int row, int col)
+        {
+            return row >= 0 && row < matrix.GetLength(0) && col >= 0 && col < matrix.GetLength(1);
+        }
+        static void Main(string[] args)
+        {
+            matrix = new string[8, 8];
+            for (int i = 0; i < 8; i++)
+            {
+                string line = Console.ReadLine();
+                for (int j = 0; j < 8; j++)
+                {
+                    matrix[i, j] = line[j].ToString();
+                    if (matrix[i, j] == "b")
+                    {
+                        bRow = i;
+                        bCol = j;
+                    }
+                    if (matrix[i, j] == "w")
+                    {
+                        wRow = i;
+                        wCol = j;
+                    }
+                }
+            }
+
+            while (!end)
+            {
+                Moving(wRow, wCol, -1);
+                if (end)
+                {
+                    break;
+                }
+                Moving(bRow, bCol, 1);
+            }
+        }
+    }
+}
