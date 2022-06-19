@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp94
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int wasted = 0;
+            Queue<int> guests = new Queue<int>(Console.ReadLine().Split().Select(int.Parse).ToArray());
+            Stack<int> plates = new Stack<int>(Console.ReadLine().Split().Select(int.Parse).ToArray());
+
+            while(true)
+            {
+                if(guests.Count==0)
+                {
+                    break;
+                }
+                if(plates.Count==0)
+                {
+                    break;
+                }
+                int guest = guests.Peek();
+                while(guest>0)
+                {
+                    int plate = plates.Pop();
+                    if (plate > guest)
+                    { 
+                        int wasteToAdd = plate - guest;
+                        wasted -= wasteToAdd;
+                    }
+                    guest -= plate;
+                }
+                guests.Dequeue();
+            }
+
+            if(guests.Count==0)
+            {
+                Console.WriteLine("Plates: "+String.Join(" ",plates));
+                Console.WriteLine("Wasted grams of food: "+Math.Abs(wasted));
+            }
+            else
+            {
+                Console.WriteLine("Guests: "+String.Join(" ",guests));
+                Console.WriteLine("Wasted grams of food: "+Math.Abs(wasted));
+            }
+        }
+    }
+}
