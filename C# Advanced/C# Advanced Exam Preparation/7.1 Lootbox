@@ -1,0 +1,53 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp99
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            List<int> collectionLoot = new List<int>();
+            Queue<int> firstBox = new Queue<int>(Console.ReadLine().Split().Select(int.Parse).ToArray());
+            Stack<int> secondBox = new Stack<int>(Console.ReadLine().Split().Select(int.Parse).ToArray());
+
+            while (firstBox.Count > 0 && secondBox.Count > 0)
+            {
+                int itemF = firstBox.Peek();
+                int itemS = secondBox.Peek();
+
+                if ((itemF + itemS) % 2 == 0)
+                {
+                    int toAdd = itemS + itemF;
+                    collectionLoot.Add(toAdd);
+                    firstBox.Dequeue();
+                    secondBox.Pop();
+                }
+                else
+                {
+                    secondBox.Pop();
+                    firstBox.Enqueue(itemS);
+                }
+            }
+
+            if (firstBox.Count == 0)
+            {
+                Console.WriteLine("First lootbox is empty");
+            }
+            else
+            {
+                Console.WriteLine("Second lootbox is empty");
+            }
+
+            if (collectionLoot.Sum() >= 100)
+            {
+                Console.WriteLine($"Your loot was epic! Value: {collectionLoot.Sum()}");
+            }
+            else
+            {
+                Console.WriteLine($"Your loot was poor... Value: {collectionLoot.Sum()}");
+            }
+        }
+    }
+}
