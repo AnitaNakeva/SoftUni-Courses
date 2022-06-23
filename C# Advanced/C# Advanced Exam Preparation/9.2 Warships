@@ -1,0 +1,206 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp105
+{
+    internal class Program
+    {
+        public static int count1Before = 0;//4
+        public static int count2Before = 0;//4
+        public static char[,] matrix;
+        public static int n = int.Parse(Console.ReadLine());
+        public static List<string> info = Console.ReadLine().Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
+        
+        public static bool IsInside(int row, int col)
+        {
+            return row >= 0 && row < n && col >= 0 && col < n;
+        }
+        static void Main(string[] args)
+        {
+            matrix = new char[n, n];
+            for (int i = 0; i < n; i++)
+            {
+                char[] line = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(char.Parse).ToArray();
+                for (int j = 0; j < n; j++)
+                {
+                    matrix[i, j] = line[j];
+                    if(matrix[i,j]=='<')
+                    {
+                        count1Before++;
+                    }
+                    else if(matrix[i,j]=='>')
+                    {
+                        count2Before++;
+                    }
+                }
+            }
+            int count1 = count1Before;//4//3
+            int count2 = count2Before;//4//0
+
+            while (info.Count>0) 
+            {
+                string[] attack = info[0].Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
+                int curRow = int.Parse(attack[0]);
+                int curCol = int.Parse(attack[1]);
+                if (IsInside(curRow, curCol))
+                {
+                    if (matrix[curRow, curCol] == '>')
+                    {
+                        count2--;
+                        matrix[curRow, curCol] = 'X';
+                        if(count2<=0)
+                        {
+                            break;
+                        }
+                    }
+                    else if (matrix[curRow, curCol] == '<')
+                    {
+                        count1--;
+                        matrix[curRow, curCol] = 'X';
+                        if(count1<=0)
+                        {
+                            break;
+                        }
+                    }
+                    else if (matrix[curRow, curCol] == '#')
+                    {
+                        if (curRow - 1 >= 0)
+                        {
+                            if (matrix[curRow - 1, curCol] == '>')
+                            {
+                                count2--;
+                            }
+                            else if (matrix[curRow - 1, curCol] == '<')
+                            {
+                                count1--;
+                            }
+                            matrix[curRow - 1, curCol] = 'X';
+                        }
+
+                        if (curRow + 1 < n)
+                        {
+                            if (matrix[curRow + 1, curCol] == '>')
+                            {
+                                count2--;
+                            }
+                            else if (matrix[curRow + 1, curCol] == '<')
+                            {
+                                count1--;
+                            }
+                            matrix[curRow + 1, curCol] = 'X';
+                        }
+
+                        if (curCol + 1 < n)
+                        {
+                            if (matrix[curRow, curCol + 1] == '>')
+                            {
+                                count2--;
+                            }
+                            else if (matrix[curRow, curCol + 1] == '<')
+                            {
+                                count1--;
+                            }
+                            matrix[curRow, curCol + 1] = 'X';
+
+                        }
+
+                        if (curCol - 1 >= 0)
+                        {
+                            if (matrix[curRow, curCol - 1] == '>')
+                            {
+                                count2--;
+                            }
+                            else if (matrix[curRow, curCol - 1] == '<')
+                            {
+                                count1--;
+                            }
+                            matrix[curRow, curCol - 1] = 'X';
+                        }
+
+                        if (curRow - 1 >= 0 && curCol - 1 >= 0)
+                        {
+                            if (matrix[curRow - 1, curCol - 1] == '>')
+                            {
+                                count2--;
+                            }
+                            else if (matrix[curRow - 1, curCol - 1] == '<')
+                            {
+                                count1--;
+                            }
+                            matrix[curRow - 1, curCol - 1] = 'X';
+                        }
+
+                        if (curRow + 1 < n && curCol + 1 < n)
+                        {
+                            if (matrix[curRow + 1, curCol + 1] == '>')
+                            {
+                                count2--;
+                            }
+                            else if (matrix[curRow + 1, curCol + 1] == '<')
+                            {
+                                count1--;
+                            }
+                            matrix[curRow + 1, curCol + 1] = 'X';
+                        }
+
+                        if (curRow - 1 >= 0 && curCol + 1 < n)
+                        {
+                            if (matrix[curRow - 1, curCol + 1] == '>')
+                            {
+                                count2--;
+                            }
+                            else if (matrix[curRow - 1, curCol + 1] == '<')
+                            {
+                                count1--;
+                            }
+                            matrix[curRow - 1, curCol + 1] = 'X';
+                        }
+
+                        if (curRow + 1 < n && curCol - 1 >= 0)
+                        {
+                            if (matrix[curRow + 1, curCol - 1] == '>')
+                            {
+                                count2--;
+                            }
+                            else if (matrix[curRow + 1, curCol - 1] == '<')
+                            {
+                                count1--;
+                            }
+                            matrix[curRow + 1, curCol - 1] = 'X';
+                        }
+
+
+                    }
+                    else
+                    {
+                        matrix[curRow, curCol] = '*';
+                    }
+                }
+                info.RemoveAt(0);
+                if (count2 <= 0)
+                {
+                    break;
+                }
+                if (count1 <= 0)
+                {
+                    break;
+                }
+            }
+
+            if(count1<=0)
+            {
+                Console.WriteLine($"Player Two has won the game! {count1Before+count2Before-count2} ships have been sunk in the battle.");
+            }
+            else if(count2<=0)
+            {
+                Console.WriteLine($"Player One has won the game! {count2Before+count1Before-count1} ships have been sunk in the battle.");
+            }
+            else
+            {
+                Console.WriteLine($"It's a draw! Player One has {count1} ships left. Player Two has {count2} ships left.");
+            }
+        }
+    }
+}
