@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp109
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Stack<int> tasks = new Stack<int>(Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse));
+            Queue<int> threads = new Queue<int>(Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse));
+            int task = int.Parse(Console.ReadLine());
+
+            while (tasks.Contains(task))
+            {
+                int curThread = threads.Peek();
+                int curTask = tasks.Peek();
+                if(curTask==task)
+                {
+                    tasks.Pop();
+                    break;
+                }
+                if(curThread>=curTask)
+                {
+                    threads.Dequeue();
+                    tasks.Pop();
+                }
+                else
+                {
+                    threads.Dequeue();
+                }
+            }
+
+            Console.WriteLine($"Thread with value {threads.Peek()} killed task {task}");
+            Console.WriteLine(String.Join(" ",threads));
+
+        }
+    }
+}
