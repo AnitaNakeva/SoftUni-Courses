@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp109
+{
+    internal class Program
+    {
+        public static string[] size = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
+        public static int N = int.Parse(size[0]);
+        public static int M = int.Parse(size[1]);
+        public static int[,] matrix;
+
+        public static void Bloom(int row, int col)
+        {
+            for (int i = 0; i < M; i++)
+            {
+                if (matrix[row, i] != matrix[row, col])
+                {
+                    matrix[row, i]++;
+                }
+            }
+
+            for (int i = 0; i < N; i++)
+            {
+                if (matrix[i, col] != matrix[row, col])
+                {
+                    matrix[i, col]++;
+                }
+            }
+        }
+        public static bool IsInside(int row, int col)
+        {
+            return row >= 0 && row < N && col >= 0 && col < M;
+        }
+        static void Main(string[] args)
+        {
+            matrix = new int[N, M];
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < M; j++)
+                {
+                    matrix[i, j] = 0;
+                }
+            }
+
+            string command = Console.ReadLine();
+            while(command!="Bloom Bloom Plow")
+            {
+                int[] coordinates = command.Split(" ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse).ToArray();
+                int row = coordinates[0];
+                int col = coordinates[1];
+
+                if (IsInside(row, col))
+                {
+                    matrix[row, col]--;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid coordinates.");
+                }
+
+                command = Console.ReadLine();
+            }
+
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < M; j++)
+                {
+                    if(matrix[i,j]<0)
+                    {
+                        Bloom(i, j);
+                    }
+                }
+            }
+
+
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < M; j++)
+                {
+                    if(matrix[i,j]==-1)
+                    {
+                        matrix[i, j] += 2;
+                    }
+                    Console.Write(matrix[i,j]+" ");
+                }
+                Console.WriteLine();
+            }
+        }
+    }
+}
