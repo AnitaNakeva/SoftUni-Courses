@@ -1,0 +1,136 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp107
+{
+    internal class Program
+    {
+        public static int n = int.Parse(Console.ReadLine());
+        public static char[,] matrix;
+        public static int row;
+        public static int col;
+        public static int rowO1;
+        public static int colO1;
+        public static int rowO2;
+        public static int colO2;
+        public static int money = 0;
+        public static bool isOut = false;
+        public static bool O1Found = false;
+        public static bool O2Found = false;
+
+        public static void GoDirection(int a, int b)
+        {
+            matrix[row, col] = '-';
+            if(IsInside(row+a,col+b))
+            {
+                row += a;
+                col += b;
+                if (Char.IsDigit(matrix[row, col]))
+                {
+                    money += int.Parse(matrix[row, col].ToString());
+                    matrix[row, col] = 'S';
+                }
+                else if (row == rowO2 && col == colO2)
+                {
+                    matrix[row, col] = '-';
+                    row = rowO1;
+                    col = colO1;
+                    matrix[row, col] = 'S';
+                }
+                else if (row == rowO1 && col == colO1)
+                {
+                    matrix[row, col] = '-';
+                    row = rowO2;
+                    col = colO2;
+                    matrix[row, col] = 'S';
+                }
+
+            }
+            else
+            {
+                isOut = true;
+            }
+        }
+
+        public static bool IsInside(int row, int col)
+        {
+            return row >= 0 && row < n && col >= 0 && col < n;
+        }
+            
+        static void Main(string[] args)
+        {
+            matrix = new char[n, n];
+            for (int i = 0; i < n; i++)
+            {
+                string line = Console.ReadLine();
+                for (int j = 0; j < n; j++)
+                {
+                    matrix[i, j] = char.Parse(line[j].ToString());
+                    if(matrix[i,j]=='S')
+                    {
+                        row = i;
+                        col = j;
+                    }
+                    else if (matrix[i, j] == 'O'&&O1Found==false)
+                    {
+                        O1Found = true;
+                        rowO1 = i;
+                        colO1 = j;
+                    }
+                    else if (matrix[i, j] == 'O' &&O2Found==false)
+                    {
+                        O2Found = true;
+                        if (rowO1 != i || colO1 != j)
+                        {
+                            rowO2 = i;
+                            colO2 = j;
+                        }
+                    }
+                }
+            }
+
+            while (isOut == false && money < 50) 
+            {
+                string command = Console.ReadLine();
+                if(command=="up")
+                {
+                    GoDirection(-1, 0);
+                }
+                else if (command == "down")
+                {
+                    GoDirection(1, 0);
+                }
+                else if (command == "left")
+                {
+                    GoDirection(0, -1);
+                }
+                if (command == "right")
+                {
+                    GoDirection(0, 1);
+                }
+            }
+
+            if(money>=50)
+            {
+                Console.WriteLine("Good news! You succeeded in collecting enough money!");
+            }
+            else
+            {
+                Console.WriteLine("Bad news, you are out of the bakery.");
+            }
+
+            Console.WriteLine($"Money: {money}");
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    Console.Write(matrix[i,j]);
+                }
+                Console.WriteLine();
+            }
+
+        }
+    }
+}
