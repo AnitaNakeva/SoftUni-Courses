@@ -1,0 +1,100 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp114
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Queue<int> effects = new Queue<int>(Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse));
+            Stack<int> casings = new Stack<int>(Console.ReadLine().Split(", ", StringSplitOptions.RemoveEmptyEntries).Select(int.Parse));
+            SortedDictionary<string, int> bombs = new SortedDictionary<string, int>
+            {
+                { "Datura Bombs",0 },
+                { "Cherry Bombs", 0 },
+                { "Smoke Decoy Bombs", 0}
+
+            };
+            bool isFilled = false;
+
+            while (effects.Any() && casings.Any()&&isFilled==false)
+            {
+                int curEffect = effects.Peek();
+                int curCasing = casings.Peek();
+                if (curCasing + curEffect == 40)
+                {
+                    bombs["Datura Bombs"]++;
+                    effects.Dequeue();
+                    casings.Pop();
+                }
+                else if (curEffect + curCasing == 60)
+                {
+                    bombs["Cherry Bombs"]++;
+                    effects.Dequeue();
+                    casings.Pop();
+                }
+                else if (curCasing + curEffect == 120)
+                {
+                    bombs["Smoke Decoy Bombs"]++;
+                    effects.Dequeue();
+                    casings.Pop();
+                }
+                else
+                {
+                    casings.Pop();
+                    casings.Push(curCasing - 5);
+                }
+
+                bool curFilling = true;
+                foreach (var bomb in bombs)
+                {
+                    if (bomb.Value < 3)
+                    {
+                        curFilling = false;
+                    }
+                }
+                if (curFilling)
+                {
+                    isFilled = true;
+                    break;
+                }
+            }
+
+            if (isFilled)
+            {
+                Console.WriteLine("Bene! You have successfully filled the bomb pouch!");
+            }
+            else
+            {
+                Console.WriteLine("You don't have enough materials to fill the bomb pouch.");
+            }
+
+            if (effects.Any())
+            {
+                Console.WriteLine($"Bomb Effects: {string.Join(", ", effects)}");
+            }
+            else
+            {
+                Console.WriteLine("Bomb Effects: empty");
+            }
+
+            if (casings.Any())
+            {
+                Console.WriteLine($"Bomb Casings: {string.Join(", ", casings)}");
+            }
+            else
+            {
+                Console.WriteLine("Bomb Casings: empty");
+            }
+
+            foreach (var bomb in bombs)
+            {
+                    Console.WriteLine(bomb.Key + ": " + bomb.Value);
+            
+            }
+        }
+    }
+}
