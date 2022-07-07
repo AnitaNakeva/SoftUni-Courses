@@ -20,6 +20,7 @@ namespace ConsoleApp105
         }
         static void Main(string[] args)
         {
+        
             matrix = new char[n, n];
             for (int i = 0; i < n; i++)
             {
