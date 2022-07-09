@@ -1,0 +1,197 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp127
+{
+    internal class Program
+    {
+    
+    
+    internal class Person
+    {
+
+        public Person(string name, double money)
+        {
+            this.Name = name;
+            this.Money = money;
+            this.products = new List<string>();
+        }
+
+        private string name;
+        private double money;
+
+        public List<string> products;
+
+        public string Name 
+        {
+            get
+            {
+                return this.name;
+            }
+            private set
+            {
+                if(String.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("Name cannot be empty");
+                }
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Name cannot be empty");
+                }
+                this.name = value;
+            }
+        }
+
+        public double Money
+        {
+            get
+            {
+                return this.money;
+            }
+            private set
+            {
+                if (value<0)
+                {
+                    throw new ArgumentException("Money cannot be negative");
+                }
+                this.money = value;
+            }
+        }
+
+        public IReadOnlyList<string> Products
+        {
+            get
+            {
+                return this.products.AsReadOnly();
+            }
+        }
+
+
+        public void BuyProduct(Product product)
+        {
+            if(this.Money>=product.Cost)
+            {
+                this.Money -= product.Cost;
+                this.products.Add(product.Name);
+                Console.WriteLine(this.Name+" bought "+product.Name);
+            }
+            else
+            {
+                throw new InvalidOperationException(this.Name+" can't afford "+product.Name);
+            }
+        }
+
+    }
+    
+    internal class Product
+    {
+        public Product(string name, double cost)
+        {
+            this.Name = name;
+            this.Cost = cost;
+        }
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
+            private set
+            {
+                if (String.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("Name cannot be empty");
+                }
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("Name cannot be empty");
+                }
+
+                this.name = value;
+            }
+        }
+
+        private string name;
+
+        public double Cost
+        {
+            get
+            {
+                return this.cost;
+            }
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException("Money cannot be negative");
+                }
+                this.cost = value;
+            }
+        }
+
+        private double cost;
+    }
+    
+    
+    
+        static void Main(string[] args)
+        {
+                string[] peopleInfo = Console.ReadLine().Split(';', StringSplitOptions.RemoveEmptyEntries).ToArray();
+                string[] productsInfo = Console.ReadLine().Split(';', StringSplitOptions.RemoveEmptyEntries).ToArray();
+
+                Dictionary<string, Product> products = new Dictionary<string, Product>();
+                Dictionary<string, Person> people = new Dictionary<string, Person>();
+
+            try 
+            { 
+                for (int i = 0; i < peopleInfo.Length; i++)
+                {
+                    string[] newPr = peopleInfo[i].Split('=',StringSplitOptions.RemoveEmptyEntries).ToArray();
+                    Person person = new Person(newPr[0], int.Parse(newPr[1]));
+                    people.Add(newPr[0], person);
+                }
+
+                for (int i = 0; i < productsInfo.Length; i++)
+                {
+                    string[] newProd = productsInfo[i].Split('=',StringSplitOptions.RemoveEmptyEntries).ToArray();
+                    Product product = new Product(newProd[0], int.Parse(newProd[1]));
+                    products.Add(newProd[0], product);
+                }
+
+                string command = Console.ReadLine();
+                while (command != "END")
+                {
+                    string[] commands = command.Split().ToArray();
+                    try
+                    {
+                        people[commands[0]].BuyProduct(products[commands[1]]);
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    command = Console.ReadLine();
+                }
+
+                
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+
+            foreach (Person person in people.Values)
+            {
+                Console.Write(person.Name + " - ");
+                if (person.Products.Count == 0)
+                {
+                    Console.WriteLine("Nothing bought");
+                }
+                else
+                    Console.WriteLine(String.Join(", ", person.Products));
+            }
+        }
+    }
+}
