@@ -1,0 +1,366 @@
+using System;
+using System.Linq;
+
+namespace ConsoleApp128
+{
+    internal class Program
+    {
+    
+    public class Topping
+    {
+
+        public Topping(string type, double grams)
+        {
+            this.Type = type;
+            this.Grams = grams;
+        }
+        private double grams;
+        private string type;
+
+       // private double typeModifier;
+
+        //protected double TypeModifier
+        //{
+        //    get
+        //    {
+        //        return this.typeModifier;
+        //    }
+
+        //    private set
+        //    {
+        //        if (type == "Meat")
+        //        {
+        //            this.typeModifier = 1.2;
+        //        }
+        //        else if (type == "Veggies")
+        //        {
+        //            this.typeModifier = 0.8;
+        //        }
+        //        else if(type == "Cheese")
+        //        {
+        //            this.typeModifier = 1.1;
+        //        }
+        //        else
+        //        {
+        //            this.typeModifier = 0.9;
+        //        }
+        //    }
+        //}
+        // public double CaloriesPerGram => TypeModifier * 200;
+
+
+        public double CaloriesPerGram 
+        {
+            get
+            {
+                if (this.Type.ToLower() == "meat")
+                {
+                    return 1.2*2;
+                }
+                else if (this.Type.ToLower() == "veggies")
+                {
+                   return 0.8*2;
+                }
+                else if (this.Type.ToLower() == "cheese")
+                {
+                    return 1.1*2;
+                }
+                else
+                {
+                    return 0.9*2;
+                }
+            }
+        }
+        public string Type
+        {
+            get
+            {
+                return this.type;
+            }
+            private set
+            {
+                if (value.ToLower() != "meat" && value.ToLower() != "veggies" && value.ToLower() != "cheese" && value.ToLower() != "sauce") 
+                {
+                    throw new ArgumentException($"Cannot place {value} on top of your pizza.");
+                }
+                this.type = value;
+            }
+        }
+        public double Grams
+        {
+            get
+            {
+                return this.grams;
+            }
+            private set
+            {
+                if (value < 1)
+                {
+                    throw new ArgumentException($"{this.Type} weight should be in the range [1..50].");
+                }
+                if (value > 50)
+                {
+                    throw new ArgumentException($"{this.Type} weight should be in the range [1..50].");
+                }
+                this.grams = value;
+            }
+        }
+    }
+    
+    public class Dough
+    {
+        public Dough(string flourType, string bakingTechnique,
+            double grams)
+        {
+            this.FlourType = flourType;
+            this.BakingTechnique = bakingTechnique;
+            this.Grams = grams;
+        }
+
+        public double Grams
+        {
+            get
+            {
+                return this.grams;
+            }
+            private set
+            {
+                if (value < 1)
+                {
+                    throw new ArgumentException("Dough weight should be in the range [1..200].");
+                }
+                if (value > 200)
+                {
+                    throw new ArgumentException("Dough weight should be in the range [1..200].");
+                }
+                this.grams = value;
+            }
+        }
+
+        public string FlourType
+        {
+            get
+            {
+                return this.flourType;
+            }
+            private set
+            {
+                if (value.ToLower() != "white" && value.ToLower() != "wholegrain")
+                {
+                    throw new ArgumentException("Invalid type of dough.");
+                }
+                this.flourType = value;
+            }
+        }
+        public string BakingTechnique
+        {
+            get
+            {
+                return this.bakingTechnique;
+            }
+            private set
+            {
+                if (value.ToLower() != "crispy" && value.ToLower() != "chewy" && value.ToLower() != "homemade")
+                {
+                    throw new ArgumentException("Invalid type of dough.");
+                }
+                this.bakingTechnique = value;
+            }
+        }
+
+        private string flourType;
+        private string bakingTechnique;
+        private double grams;
+       // private double typeModifier;
+        //private double techniqueModifier;
+        // public double CaloriesPerGram => TypeModifier * TechniqueModifier * 200;
+
+        public double CaloriesPerGram
+        {
+            get
+            {
+                double tMod = 0;
+                double tecMod = 0;
+                if(this.FlourType.ToLower() == "white")
+                {
+                    tMod = 1.5;
+                }
+                else
+                {
+                    tMod = 1;
+                }
+
+                if (bakingTechnique.ToLower() == "crispy")
+                {
+                    tecMod = 0.9;
+                }
+                else if (bakingTechnique.ToLower() == "chewy")
+                {
+                    tecMod = 1.1;
+                }
+                else if(bakingTechnique.ToLower() == "homemade")
+                {
+                    tecMod = 1;
+                }
+                return tMod * tecMod * 2;
+            }
+        }
+
+
+        //public double TypeModifier 
+        //{ 
+        //    get
+        //    {
+        //        return this.typeModifier;
+        //    }
+
+        //    private set
+        //    {
+        //        if(flourType=="White")
+        //        {
+        //            this.typeModifier = 1.5;
+        //        }
+        //        else
+        //        {
+        //            this.typeModifier = 1;
+        //        }
+        //    }
+        //}
+
+        //public double TechniqueModifier
+        //{
+        //    get
+        //    {
+        //        return this.techniqueModifier;
+        //    }
+
+        //    private set
+        //    {
+        //        if (bakingTechnique == "Crispy")
+        //        {
+        //            this.techniqueModifier = 0.9;
+        //        }
+        //        else if(bakingTechnique == "Chewy")
+        //        {
+        //            this.techniqueModifier = 1.1;
+        //        }
+        //        else
+        //        {
+        //            this.techniqueModifier = 1;
+        //        }
+        //    }
+        //}
+    }
+    
+    public class Pizza
+    {
+        public Pizza(string name, Dough dough)
+        {
+            this.Name = name;
+            this.toppings = new List<Topping>();
+            this.Dough = dough;
+        }
+        private string name;
+        private List<Topping> toppings;
+        private Dough dough;
+
+        public Dough Dough 
+        { 
+            get
+            {
+                return this.dough;
+            }
+            set
+            {
+                this.dough = value;
+            }
+        }
+
+        public void AddTopping(Topping topping)
+        {
+            if(this.toppings.Count+1==11)
+            {
+                throw new ArgumentException("Number of toppings should be in range [0..10].");
+            }
+            else
+            {
+                this.toppings.Add(topping);
+            }
+        }
+        public double TotalCalories()
+        {
+            double totalCalories = this.Dough.CaloriesPerGram * this.Dough.Grams;
+            foreach (Topping topping in this.toppings)
+            {
+                totalCalories += topping.CaloriesPerGram * topping.Grams;
+            }
+            return totalCalories;
+        }
+        
+        public IReadOnlyCollection<Topping> Toppings
+        {
+            get
+            {
+                return this.toppings.AsReadOnly();
+            }
+        }
+
+        public int NumberOfToppings => this.Toppings.Count;
+        public string Name 
+        {
+            get
+            {
+                return this.name;
+            }
+            private set
+            {
+                if(String.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("Pizza name should be between 1 and 15 symbols.");
+                }
+                if(value.Length > 10)
+                {
+                    throw new ArgumentException("Pizza name should be between 1 and 15 symbols.");
+                }
+                this.name = value;
+            }
+        }
+    }
+        static void Main(string[] args)
+        {
+            try
+            {
+                string[] nameInfo = Console.ReadLine().Split(" ").ToArray();
+                string nameOfPizza = nameInfo[1];
+                string[] doughInfo = Console.ReadLine().Split(" ").ToArray();
+                string techniqueOfDough = doughInfo[2];
+                string typeOfDough = doughInfo[1];
+                double gramsOfDough = double.Parse(doughInfo[3]);
+
+                Dough dough = new Dough(typeOfDough, techniqueOfDough, gramsOfDough);
+
+                Pizza pizza = new Pizza(nameOfPizza, dough);
+
+                string commands = Console.ReadLine();
+                while (commands != "END")
+                {
+                    string[] command = commands.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
+                    string typeOfTopping = command[1];
+                    double gramsOfTopping = double.Parse(command[2]);
+
+                    Topping topping = new Topping(typeOfTopping, gramsOfTopping);
+
+                    pizza.AddTopping(topping);
+                    commands = Console.ReadLine();
+                }
+
+                
+                Console.WriteLine($"{pizza.Name} - {pizza.TotalCalories():F2} Calories.");
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+    }
+}
