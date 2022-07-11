@@ -1,0 +1,333 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace ConsoleApp129
+{
+    internal class Program
+    {
+    public class Team
+    {
+        public Team(string name)
+        {
+            this.Name = name;
+            this.players = new List<Player>();
+        }
+
+        private string name;
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
+            private set
+            {
+                if (String.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("A name should not be empty.");
+                }
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("A name should not be empty.");
+                }
+                this.name = value;
+            }
+        }
+        public int NumberOfPlayers => this.players.Count;
+
+        public List<Player> Players
+        {
+            get
+            {
+                return this.players;
+            }
+        }
+        private List<Player> players;
+
+        public void Add(Player player)
+        {
+            this.players.Add(player);
+        }
+        public void Remove(Player player)
+        {
+            if (this.players.Contains(player))
+            {
+                this.players.Remove(player);
+            }
+            else
+            {
+                throw new ArgumentException($"Player {player.Name} is not in {this.Name} team.");
+            }
+        }
+
+        public int Rating
+        {
+            get
+            {
+                double rating = 0;
+                if (this.Players.Count > 0)
+                {
+                    foreach (Player player in this.players)
+                    {
+                        rating += player.SkillLevel;
+                    }
+
+                    rating /= NumberOfPlayers;
+                }
+                
+                return (int)Math.Round(rating, 0);
+            }
+        }
+    }
+    
+    public class Player
+    {
+        public double SkillLevel => (this.Endurance+this.Sprint+this.Dribble+this.Passing+this.Shooting)/5;
+
+        private const string StatMessage = "{0} should be between 0 and 100.";
+        public string Name 
+        { 
+            get
+            {
+                return this.name;
+            }
+            private set
+            {
+                if(String.IsNullOrEmpty(value))
+                {
+                    throw new ArgumentException("A name should not be empty.");
+                }
+                if (String.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentException("A name should not be empty.");
+                }
+                this.name = value;
+            }
+        }
+        private string name;
+        private double endurance;
+        private double sprint;
+        private double dribble;
+        private double passing;
+        private double shooting;
+
+        public Player(string name, double endurance, double sprint,
+            double dribble, double passing, double shooting)
+        {
+            this.Name = name;
+            this.Endurance = endurance;
+            this.Sprint = sprint;
+            this.Dribble = dribble;
+            this.Passing = passing;
+            this.Shooting = shooting;
+        }
+
+        public double Endurance
+        { 
+            get
+            {
+                return this.endurance;
+            }
+            private set
+            {
+                if(value<0)
+                {
+                    throw new ArgumentException(string.Format(StatMessage,"Endurance"));
+                }
+                if (value > 100)
+                {
+                    throw new ArgumentException(string.Format(StatMessage, "Endurance"));
+                }
+
+                this.endurance = value;
+            }
+        }
+        public double Sprint
+        {
+            get
+            {
+                return this.sprint;
+            }
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException(string.Format(StatMessage, "Sprint"));
+                }
+                if (value > 100)
+                {
+                    throw new ArgumentException(string.Format(StatMessage, "Sprint"));
+                }
+
+                this.sprint = value;
+            }
+        }
+        public double Dribble
+        {
+            get
+            {
+                return this.dribble;
+            }
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException(string.Format(StatMessage, "Dribble"));
+                }
+                if (value > 100)
+                {
+                    throw new ArgumentException(string.Format(StatMessage, "Dribble"));
+                }
+
+                this.dribble = value;
+            }
+        }
+        public double Passing
+        {
+            get
+            {
+                return this.passing;
+            }
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException(string.Format(StatMessage, "Passing"));
+                }
+                if (value > 100)
+                {
+                    throw new ArgumentException(string.Format(StatMessage, "Passing"));
+                }
+
+                this.passing = value;
+            }
+        }
+        public double Shooting
+        {
+            get
+            {
+                return this.shooting;
+            }
+            private set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentException(string.Format(StatMessage, "Shooting"));
+                }
+                if (value > 100)
+                {
+                    throw new ArgumentException(string.Format(StatMessage, "Shooting"));
+                }
+
+                this.shooting = value;
+            }
+        }
+
+    }
+    
+    
+        static void Main(string[] args)
+        {
+
+            List<Team> teams = new List<Team>();
+            string commands;
+
+            while ((commands = Console.ReadLine()) != "END")
+            {
+                string[] command = commands.Split(';', StringSplitOptions.RemoveEmptyEntries).ToArray();
+
+                try
+                {
+                    if (command[0] == "Team")
+                    {
+                        Team team = new Team(command[1]);
+                        teams.Add(team);
+                    }
+                    else if (command[0] == "Add")
+                    {
+                        var thisTeam = teams.FirstOrDefault(x => x.Name == command[1]);
+                        if (thisTeam == null)
+                        {
+                            throw new ArgumentException($"Team {command[1]} does not exist.");
+                        }
+                        else
+                        {
+                            Player player = new Player(command[2], double.Parse(command[3]), double.Parse(command[4]), double.Parse(command[5]), double.Parse(command[6]), double.Parse(command[7]));
+                            int index = 0;
+                            for (int i = 0; i < teams.Count; i++)
+                            {
+                                if (teams[i].Name == command[1])
+                                {
+                                    index = i;
+                                    break;
+                                }
+                            }
+                            teams[index].Add(player);
+                        }
+                    }
+                    else if (command[0] == "Remove")
+                    {
+                        var thisTeam = teams.FirstOrDefault(x => x.Name == command[1]);
+                        if (thisTeam == null)
+                        {
+                            throw new ArgumentException($"Team {command[1]} does not exist.");
+                        }
+                        else
+                        {
+                            int index = 0;
+                            for (int i = 0; i < teams.Count; i++)
+                            {
+                                if (teams[i].Name == command[1])
+                                {
+                                    index = i;
+                                    break;
+                                }
+                            }
+
+
+                            var playerToRem = teams[index].Players.FirstOrDefault(x => x.Name == command[2]);
+                            if (playerToRem == null)
+                            {
+                                throw new ArgumentException($"Player {command[2]} is not in {command[1]} team.");
+                            }
+                            else
+                            {
+                                teams[index].Players.Remove(playerToRem);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var thisTeam = teams.FirstOrDefault(x => x.Name == command[1]);
+                        if (thisTeam == null)
+                        {
+                            throw new ArgumentException($"Team {command[1]} does not exist.");
+                        }
+                        else
+                        {
+                            int index = 0;
+                            for (int i = 0; i < teams.Count; i++)
+                            {
+                                if (teams[i].Name == command[1])
+                                {
+                                    index = i;
+                                    break;
+                                }
+                            }
+                            Console.WriteLine(teams[index].Name + " - " + teams[index].Rating);
+                        }
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+        }
+    }
+
+
+
+}
